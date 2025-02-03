@@ -1,0 +1,6 @@
+[submodule "train/train_rl/OpenRLHF"]
+	path = train/train_rl/OpenRLHF
+	url = https://github.com/jdf-prog/OpenRLHF.git
+[submodule "train/train_rm/LLaMA-Factory"]
+	path = train/train_rm/LLaMA-Factory
+	url = https://github.com/hiyouga/LLaMA-Factory.git
