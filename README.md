@@ -1,6 +1,6 @@
 # 🂡 AceCoder
 
-<a target="_blank" href="#">
+<a target="_blank" href="https://github.com/TIGER-AI-Lab/AceCoder/blob/main/assets/pdf/acecoder_v1.pdf">
 <img style="height:22pt" src="https://img.shields.io/badge/-Paper-red?style=flat&logo=arxiv"></a>
 <a target="_blank" href="https://github.com/TIGER-AI-Lab/AceCoder">
 <img style="height:22pt" src="https://img.shields.io/badge/-Code-green?style=flat&logo=github"></a>
