@@ -80,7 +80,7 @@ See our [website](https://tiger-ai-lab.github.io/AceCoder/) or paper for detaile
 (TODO)
 
 ### Training RL Model
-(TODO)
+See [train/train_rl/README.md](train/train_rl/README.md) for detailed instructions.
 
 ### Evaluation
 (TODO)
