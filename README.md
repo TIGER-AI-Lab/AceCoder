@@ -94,6 +94,6 @@ If you find this work helpful, please consider citing:
     author={Zeng, Huaye and Jiang, Dongfu and Wang, Haozhe and Nie, Ping and Chen, Xiaotong and Chen, Wenhu},
     journal={ArXiv},
     year={2025},
-    volume={abs/2207.01780}
+    volume={}
 }
 ```
