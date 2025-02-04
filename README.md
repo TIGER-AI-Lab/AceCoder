@@ -1,10 +1,6 @@
-# AceCoder
+# 🂡 AceCoder
 
-<div style="width:40% float:center diaplay:inline">
-     <img src=./docs/logo-ai2.svg width=35%/> &nbsp; &nbsp; <img src=./assets/images/ac_overview.png width=60%/>
-</div>
-
-<a target="_blank" href="https://arxiv.org/abs/2406.15252">
+<a target="_blank" href="#">
 <img style="height:22pt" src="https://img.shields.io/badge/-Paper-red?style=flat&logo=arxiv"></a>
 <a target="_blank" href="https://github.com/TIGER-AI-Lab/AceCoder">
 <img style="height:22pt" src="https://img.shields.io/badge/-Code-green?style=flat&logo=github"></a>
@@ -71,7 +67,7 @@
 | Qwen2.5-Coder-7B   | AceCodeRM-7B      | AceCode-89K-hard (22k)      | [TIGER-Lab/AceCoder-Qwen2.5-Coder-7B-Base-RM](https://huggingface.co/TIGER-Lab/AceCoder-Qwen2.5-Coder-7B-Base-RM) |
 | Qwen2.5-Coder-7B   | Rule      | AceCode-89K-hard (22k)      | [TIGER-Lab/AceCoder-Qwen2.5-Coder-7B-Base-Rule](https://huggingface.co/TIGER-Lab/AceCoder-Qwen2.5-Coder-7B-Base-Rule) |
 
-## Performance
+## 📈 Performance
 See our [website](https://tiger-ai-lab.github.io/AceCoder/) or paper for detailed performance report.
 
 ## 🚀Quick Start
