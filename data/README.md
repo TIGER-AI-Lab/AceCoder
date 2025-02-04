@@ -11,26 +11,15 @@ conda activate acecoder_data
 I assume you have **CUDA 12.1** and **conda** installed. With those, run the following command:
 
 ```bash
-source setup.sh
+conda create -n acecoder_data python=3.11
+conda init
+conda activate acecoder_data
+pip install torch==2.4.0
+pip install -r requirements.txt
 ```
 
-You will be prompted some y/n options for installing packages, type y then enter in each instance <br />
+You will be prompted some y/n options for installing packages, type y then enter in each instance. Moreover, there are going to be some resolution errors, simply ignore them.
 
-Note if you have cuda 11.8, then you need to:
-1. remove "vllm", "torch", and "xformers" from setup.py
-2. uncomment the following code in setup.sh
-
-```bash
-export VLLM_VERSION=0.2.6
-export PYTHON_VERSION=311
-pip install https://github.com/vllm-project/vllm/releases/download/v${VLLM_VERSION}/vllm-${VLLM_VERSION}+cu118-cp${PYTHON_VERSION}-cp${PYTHON_VERSION}-manylinux1_x86_64.whl
-
-pip uninstall torch -y
-pip install torch==2.1.2 --index-url https://download.pytorch.org/whl/cu118
-
-pip uninstall xformers -y
-pip install xformers==0.0.23.post1 --index-url https://download.pytorch.org/whl/cu118
-```
 
 ## Dataset Curation
 Follow the following steps closely to create AceCode-89K and AceCodePair-300K.
