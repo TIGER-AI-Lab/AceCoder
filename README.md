@@ -1,8 +1,4 @@
-# AceCoder
-
-<div style="width:40% float:center diaplay:inline">
-     <img src=./docs/logo-ai2.svg width=35%/> &nbsp; &nbsp; <img src=./assets/images/ac_overview.png width=60%/>
-</div>
+# 🂡 AceCoder
 
 <a target="_blank" href="https://arxiv.org/abs/2406.15252">
 <img style="height:22pt" src="https://img.shields.io/badge/-Paper-red?style=flat&logo=arxiv"></a>
