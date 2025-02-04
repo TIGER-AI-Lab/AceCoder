@@ -28,7 +28,7 @@
 
 ## 🔥News
 
-- [2025/2/3] We release the [AceCoder Paper](#), along with the [🤗 Models and Datasets](https://huggingface.co/collections/TIGER-Lab/acecoder-67a16011a6c7d65cad529eba) on Hugging Face. 
+- [2025/2/3] We release the [AceCoder Paper](https://github.com/TIGER-AI-Lab/AceCoder/blob/main/assets/pdf/acecoder_v1.pdf), along with the [🤗 Models and Datasets](https://huggingface.co/collections/TIGER-Lab/acecoder-67a16011a6c7d65cad529eba) on Hugging Face. 
 
 
 ## Overview
