@@ -67,7 +67,7 @@
 | Qwen2.5-Coder-7B   | AceCodeRM-7B      | AceCode-89K-hard (22k)      | [TIGER-Lab/AceCoder-Qwen2.5-Coder-7B-Base-RM](https://huggingface.co/TIGER-Lab/AceCoder-Qwen2.5-Coder-7B-Base-RM) |
 | Qwen2.5-Coder-7B   | Rule      | AceCode-89K-hard (22k)      | [TIGER-Lab/AceCoder-Qwen2.5-Coder-7B-Base-Rule](https://huggingface.co/TIGER-Lab/AceCoder-Qwen2.5-Coder-7B-Base-Rule) |
 
-## Performance
+## 📈 Performance
 See our [website](https://tiger-ai-lab.github.io/AceCoder/) or paper for detailed performance report.
 
 ## 🚀Quick Start
