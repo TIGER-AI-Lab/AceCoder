@@ -72,6 +72,11 @@ See our [website](https://tiger-ai-lab.github.io/AceCoder/) or paper for detaile
 
 ## 🚀Quick Start
 
+```bash
+git submodule init
+git submodule update
+```
+
 ### Training Reward Model
 (TODO)
 
