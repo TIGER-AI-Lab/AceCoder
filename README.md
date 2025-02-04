@@ -84,8 +84,7 @@ git submodule update
 See [train/train_rl/README.md](train/train_rl/README.md) for detailed instructions.
 
 ### Evaluation
-(TODO)
-
+We use [Evalplus](https://github.com/evalplus/evalplus), [bigcodebench](https://github.com/bigcode-project/bigcodebench), [LiveCodeBench](https://github.com/LiveCodeBench/LiveCodeBench) for evaluation of HumanEval(+), MBPP(+), BigCodeBench, LiveCodeBench (V4) respectively.
 
 ## Citation
 If you find this work helpful, please consider citing:
