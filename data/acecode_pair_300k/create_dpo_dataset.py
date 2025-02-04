@@ -121,83 +121,10 @@ def create_dataset_helper_1(
             inferences_by_model[model], return_size=return_size
         )
 
-    # we now generate cross-model test cases
-    # if specific_model_name is None:
-    #     for i in range(len(model_lst) - 1):
-    #         for j in range(i + 1, len(model_lst)):
-    #             tmp_inf = (
-    #                 inferences_by_model[model_lst[i]]
-    #                 + inferences_by_model[model_lst[j]]
-    #             )
-    #             output += create_dataset_helper_2(
-    #                 tmp_inf, return_size=return_size, require_different_model=True
-    #             )
-
     for i in output:
         i.update({"prompt": prompt, "tests": tests})
 
     return output
-
-
-# The below are old code which we use the difference in accuracy to return the output. In a newer approached
-# we will instead keep the preference choice constant
-# def create_dataset_helper_2(
-#     inferences: List[Tuple], return_size: int = 3, require_different_model: bool = False
-# ) -> List[Dict]:
-#     """Create a dataset for 1 prompt, this is a helper function for the overall create_dataset function.
-
-#     Input:
-#         tuple in the form: (code, accuracy, model name)
-#         return_size: how many entries do you want the program to return
-#         require_different_model: should the return models be from different dataset
-
-#     output:
-#         A list of dictionary, each representing one question
-#     """
-#     output = []
-#     seen = set()
-#     for j in range(len(inferences) - 1):
-#         for k in range(j + 1, len(inferences)):
-#             prog1, acc1, model1 = inferences[j]
-#             prog2, acc2, model2 = inferences[k]
-#             if require_different_model and model1 == model2:
-#                 continue
-#             if (
-#                 min(acc1, acc2) > 0
-#                 and max(acc1, acc2) >= 0.4
-#                 and abs(acc2 - acc1) >= 0.2
-#             ):
-#                 if acc1 > acc2:
-#                     prog_high = prog1
-#                     acc_high = acc1
-#                     model_high = model1
-#                     prog_low = prog2
-#                     acc_low = acc2
-#                     model_low = model2
-#                 else:
-#                     prog_high = prog2
-#                     acc_high = acc2
-#                     model_high = model2
-#                     prog_low = prog1
-#                     acc_low = acc1
-#                     model_low = model1
-#                 ram = prog_high + prog_low
-#                 if ram not in seen:
-#                     # we prevent duplicates
-#                     entry = {
-#                         "program_1": prog_high,
-#                         "program_2": prog_low,
-#                         "winner": 1,
-#                         "accuracy_1": acc_high,
-#                         "accuracy_2": acc_low,
-#                         "accuracy_difference": abs(acc_high - acc_low),
-#                         "model_1": model_high,
-#                         "model_2": model_low,
-#                     }
-#                     output.append(entry)
-#                     seen.add(ram)
-#     output.sort(key=lambda x: abs(x["accuracy_1"] - x["accuracy_2"]), reverse=True)
-#     return output[:return_size]
 
 
 def create_dataset_helper_2(
@@ -223,8 +150,6 @@ def create_dataset_helper_2(
             prog2, acc2, model2 = inferences[k]
             if require_different_model and model1 == model2:
                 continue
-            # if acc1 < highest_acc:
-            #     continue  # we only want highest accuracy
             if (
                 max(acc1, acc2) >= 0.8
                 and abs(acc2 - acc1) >= 0.4
@@ -252,24 +177,12 @@ def create_dataset_helper_2(
 
 
 if __name__ == "__main__":
-    # latest oracle setting: "qwen_coder_2.5_32b_greedy"
     oracle_model_name = "qwen_coder_2.5_32b_greedy"
     for dataset in DATASET_LST:
-        # get_solution_accuracy(dataset_name=dataset)
-        for return_size in [
-            "inf",
-            # 5,
-            # 1,
-        ]:
-            create_cross_model_dataset(
+        for model in MODEL_LST.keys():
+            create_dataset_with_only_one_model(
+                model_name=model,
                 dataset_name=dataset,
-                return_size=return_size,
+                return_size="inf",
                 oracle_model_name=oracle_model_name,
             )
-            for model in MODEL_LST.keys():
-                create_dataset_with_only_one_model(
-                    model_name=model,
-                    dataset_name=dataset,
-                    return_size=return_size,
-                    oracle_model_name=oracle_model_name,
-                )

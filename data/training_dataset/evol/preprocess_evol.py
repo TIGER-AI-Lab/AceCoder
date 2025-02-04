@@ -11,7 +11,7 @@ from utility.utility import load_jsonl, save_jsonl
 
 def get_evol_programs(use_cache: bool = True) -> List[str]:
     """Step 1 of the process, extract python programs and instructions from the dataset. We only keep programs in function or class form."""
-    file_name = "training_dataset/evol/data/evol_v1.jsonl"
+    file_name = "training_dataset/evol/data/v1.jsonl"
     if os.path.exists(file_name) and use_cache:
         out = load_jsonl(file_name)
         return [i["program"] for i in out]

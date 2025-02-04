@@ -16,8 +16,8 @@ conda activate acecoder_data
 # pip uninstall xformers -y
 # pip install xformers==0.0.23.post1 --index-url https://download.pytorch.org/whl/cu118
 
-
 # install packages
+pip install torch # need to install this first for flash attn later
 pip install -e .
 
 ## Intall easy open ai by Jiang Dong Fu

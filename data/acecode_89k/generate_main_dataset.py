@@ -1,14 +1,10 @@
-import json
-
-from datasets import Dataset
-
 from training_dataset.constants import DATASET_LST
-from utility.utility import load_jsonl
+from utility.utility import load_jsonl, save_jsonl
 
 # Use this script to generate the "AceCode-89K dataset, which contains the questions, tests, inferences, etc."
 
 
-def generate_entries(oracle_model: str, huggingface_dataset_path: str):
+def generate_entries(oracle_model: str, save_path: str):
     out = []
     for dataset_name in DATASET_LST:
         jsonl_file_name = (
@@ -43,13 +39,10 @@ def generate_entries(oracle_model: str, huggingface_dataset_path: str):
                 }
             )
 
-    dataset = Dataset.from_list(out)
-    dataset.push_to_hub(huggingface_dataset_path)
+    save_jsonl(save_path, out)
 
 
 if __name__ == "__main__":
     oracle_model = "qwen_coder_2.5_32b_greedy"
-    huggingface_dataset_path = "TIGER-Lab/AceCode-89K"
-    generate_entries(
-        oracle_model=oracle_model, huggingface_dataset_path=huggingface_dataset_path
-    )
+    save_path = "AceCode-89K.jsonl"
+    generate_entries(oracle_model=oracle_model, save_path=save_path)

@@ -1,9 +1,14 @@
-# AceCode (Dev)
+# AceCode (Data Repository)
+Welcome to the data directory for the AceCode project. In this folder, you can find scripts / code used to recreate the AceCode-89K and AceCodePair-300k.
+**IMPORTANT: All instruction in this folder assumes your terminal is in the current folder (AceCoder/data/), please use ```cd data``` if you are not. We also use conda to manage our environment, so make sure you initialize to the correct interpreter:**
 
-This repository contained Wyett's development code for the project AceCoder.
+```bash
+conda init
+conda activate acecoder_data
+```
 
 ## Installation
-I assume you have CUDA 12.1 and conda installed. With those, run the following command:
+I assume you have **CUDA 12.1** and **conda** installed. With those, run the following command:
 
 ```bash
 source setup.sh
@@ -25,23 +30,72 @@ pip install torch==2.1.2 --index-url https://download.pytorch.org/whl/cu118
 
 pip uninstall xformers -y
 pip install xformers==0.0.23.post1 --index-url https://download.pytorch.org/whl/cu118
-
-## install LLM-Blender
-pip install git+https://github.com/yuchenlin/LLM-Blender.git
 ```
 
-## Training Dataset
-All the code related to training dataset creation can be found in ```training_dataset``` folder. When creating training dataset, we need to follow the following steps:
-1. Source unstructured dataset (EVOL, OSS, and BigcodePythonFns)
-2. Create MBPP-liked prompt and test cases using GPT-4o-mini
-3. Create inferences of the prompts. ```training_dataset/inference_generated_prompts_helper.sh```
-4. Evaluate on the inferences using the test cases generated. ```training_dataset/evaluate_inferenced_code_helper.sh```
-5. Then consolidate dataset with inferences. ```training_dataset/consolidate_dataset.py```
-6. Finally, you can create dataset of different purposes. The codes are found here: ```training_dataset/create_dataset/```
+## Dataset Curation
+Follow the following steps closely to create AceCode-89K and AceCodePair-300K.
 
-## Eval datasets
-- [MBPP](https://huggingface.co/datasets/mbpp)
-To inference all models on MBPP, run:
+### Download datasets from hub
+We will download the following datasets from huggingface and cache them locally:
+- Bigcode Python Functions: [bigcode/stack-dedup-python-fns](https://huggingface.co/datasets/bigcode/stack-dedup-python-fns)
+- OSS: [ise-uiuc/Magicoder-OSS-Instruct-75K-Instruction-Response](https://huggingface.co/datasets/ise-uiuc/Magicoder-OSS-Instruct-75K-Instruction-Response)
+- Evol Instruct: [ise-uiuc/Magicoder-Evol-Instruct-110K](https://huggingface.co/datasets/ise-uiuc/Magicoder-Evol-Instruct-110K)
+
+```bash
+python training_dataset/bigcode_python_fns/preprocess.py
+python training_dataset/evol/preprocess_evol.py
+python training_dataset/oss/preprocess_oss.py
 ```
-make mbpp
+
+### Use GPT-4o-mini to convert seed code data into LeetCode-Like questions and test cases
+First add the following environment variable to your shell (you can also add this to ~/.bashrc):
+```bash
+export OPENAI_API_KEYS="sk-your-openai-api-key"
+export OPENAI_API_TYPE="OpenAI"
+```
+
+If you just want to sample a few questions to try it out, run (cost less than $1 USD):
+```bash
+python training_dataset/bigcode_python_fns/generate_test_cases.py --ct=50
+python training_dataset/evol/generate_test_cases.py --ct=50
+python training_dataset/oss/generate_test_cases.py --ct=50
+```
+
+If you want to fully recreate our dataset, run (this will cost you around $300 USD):
+```bash
+python training_dataset/bigcode_python_fns/generate_test_cases.py --ct=50000
+python training_dataset/evol/generate_test_cases.py --ct=-1
+python training_dataset/oss/generate_test_cases.py --ct=-1
+```
+
+### Creating Inferences for the generated leetcode-like prompts
+Run the following to create inferences for the generated LeetCode-like prompts. This process is GPU heavy and you may want to set CUDA_VISIBLE_DEVICES if you do not wish to run the process on all of your gpus.
+```bash
+source training_dataset/inference_generated_prompts.sh
+```
+
+### Evaluate the inferenced code
+**Note: this may drain up your CPU resources and it may also make unpredictable changes to your file system since we are executing generated code. You may want to run it in a docker for your safety.**
+
+Run the following to compute the accuracies for the generated code:
+```bash
+source training_dataset/evaluate_inferenced_code.sh
+```
+
+### Consolidate the dataset
+Run:
+```bash
+python data/training_dataset/consolidate_dataset.py
+```
+
+### Creating AceCode-98K
+run:
+```bash
+python acecode_89k/generate_main_dataset.py
+```
+
+### Creating AceCodePair-300K
+run:
+```bash
+source acecode_pair_300k/create_dpo_dataset.sh
 ```

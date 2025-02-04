@@ -66,10 +66,12 @@ def get_tokenized_prompt(
                 chat,
                 continue_final_message=True,
                 add_generation_prompt=False,
-            )[:-1]
-            # note the [:-1] above is me trying to get rid of <|eot_id|> at the end
+            )[
+                :-1
+            ]  # Remote EOS token
             output.append(token_ids)
-        except:
+        except Exception as e:
+            print(e)
             print(f"error tokenizing: {chat}")
             output.append(
                 tokenizer.apply_chat_template(
@@ -78,8 +80,6 @@ def get_tokenized_prompt(
                     add_generation_prompt=False,
                 )
             )
-        # print(tokenizer.decode(token_ids))
-        # exit()
 
     return output
 
@@ -92,7 +92,7 @@ def create_inference(
     sampling_method: str = "best_of_n_top_p_sampling",
 ) -> None:
     print(
-        f"starting inference: model name: {model_name}, dataset name: {dataset_name}, model type: {model_type}"
+        f"starting inference: model name: {model_name} {model_type}, dataset name: {dataset_name}"
     )
 
     load_file_name = f"training_dataset/{dataset_name}/data/v2.jsonl"
@@ -114,17 +114,6 @@ def create_inference(
     input_token_ids = get_tokenized_prompt(
         model_path=huggingface_path, questions=instructions, tests=tests
     )
-    if sampling_method == "greedy":
-        end_tokens = [
-            "```",
-            "import unittest",
-            "from unittest",
-            "if __name__",
-            "assert",
-        ]
-        additional_sampling_params = {"stop": end_tokens}
-    else:
-        additional_sampling_params = {}
 
     inference(
         model_name=model_name,
@@ -133,7 +122,6 @@ def create_inference(
         sampling_method=sampling_method,
         input_token_ids=input_token_ids,
         inference_method="vllm",
-        additional_sampling_params=additional_sampling_params,
     )
 
 

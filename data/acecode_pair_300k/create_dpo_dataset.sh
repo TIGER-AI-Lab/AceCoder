@@ -1,0 +1,5 @@
+#!/bin/bash
+
+python acecode_pair_300k/create_dpo_dataset.py
+python acecode_pair_300k/convert_dataset_for_llama_factory_dpo.py
+python acecode_pair_300k/generate_main_pair_dataset.py

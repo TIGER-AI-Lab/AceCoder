@@ -55,7 +55,6 @@ def generate_bigcode_python_fns_test_case(ct: int = 50):
 
         append_jsonl(jsonl_file_name, chunk)
         inferenced_ct += len(chunk)
-        print(f"openai finished generating test cases for {inferenced_ct} items")
     print(f"Total Cost: {total_price}")
 
 

@@ -46,13 +46,6 @@ def evaluate_inferenced_code(
         (i["tests"] if i["tests"] is not None and len(i["tests"]) > 0 else [])
         for i in data
     ]
-    # short_tests = [i[:3] for i in tests]
-    # instructions = [
-    #     i["gpt_question"] if (i["gpt_question"] is not None) else "ignore this question"
-    #     for i in data
-    # ]
-    # prompts = get_deepseek_coder_prompts(instructions, short_tests)
-    # prompts = {i: prompts[i] for i in range(len(prompts))}
     if sampling_method == "greedy":
         fast_algo = True
         max_execution_time = 0.8
@@ -71,9 +64,3 @@ def evaluate_inferenced_code(
 
 if __name__ == "__main__":
     fire.Fire(evaluate_inferenced_code)
-
-# if __name__ == "__main__":
-#     evaluate_inferenced_code(gpt_35=True, sampling_method="top_p_sampling")
-#     # evaluate_inferenced_code(gpt_35=False, sampling_method="diverse_beam_search")
-#     get_solution_accuracy(gpt_35=True, ct=2000)
-#     # get_solution_accuracy(gpt_35=False)

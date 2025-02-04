@@ -12,7 +12,7 @@ MAX_CHUNK_SIZE = 50
 def generate_evol_test_case(ct: int = 50):
     """step 2 of the process, generate test cases using chat gpt"""
     # we check for last generated responses, so we do not waste openAI tokens
-    jsonl_file_name = "training_dataset/evol/data/evol_v2.jsonl"
+    jsonl_file_name = "training_dataset/evol/data/v2.jsonl"
     start_idx = 0
     try:
         past_data = load_jsonl(jsonl_file_name)
@@ -26,21 +26,23 @@ def generate_evol_test_case(ct: int = 50):
         return  # we already finished inferencing
 
     # preparing the input
-    data = load_jsonl("training_dataset/evol/data/evol_v1.jsonl")
+    data = load_jsonl("training_dataset/evol/data/v1.jsonl")
     if ct > 0:
         data = data[:ct]
     data = data[start_idx:]
     data_chunks = chunking(data, MAX_CHUNK_SIZE)
     inferenced_ct = 0
+    total_price = 0
     for chunk in tqdm(data_chunks):
         programs = [i["program"] for i in chunk]
         instructions = [i["instruction"] for i in chunk]
-        responses = create_test_cases_using_gpt(
+        responses, price = create_test_cases_using_gpt(
             programs=programs,
             instructions=instructions,
             use_cache=False,
-            gpt4=True,
+            return_price=True,
         )
+        total_price += price
         tests = []
         questions = []
         for i in responses:
@@ -55,7 +57,7 @@ def generate_evol_test_case(ct: int = 50):
 
         append_jsonl(jsonl_file_name, chunk)
         inferenced_ct += len(chunk)
-        print(f"openai finished generating test cases for {inferenced_ct} items")
+    print(f"Total Cost: {total_price}")
 
 
 if __name__ == "__main__":
