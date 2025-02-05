@@ -26,7 +26,7 @@ Please complete the following steps:
     }
   },
 "AceCodePair-QwenCoderIns32B": {
-    "hf_hub_url": "TIGER-Lab/TODO-UPLOAD-THIS",
+    "hf_hub_url": "TIGER-Lab/AceCodePair-QwenCoderIns32B",
     "ranking": true,
     "columns": {
       "prompt": "instruction",

@@ -97,5 +97,5 @@ python acecode_89k/generate_main_dataset.py
 ### Creating AceCodePair-300K
 run:
 ```bash
-source acecode_pair_300k/create_dpo_dataset.sh
+source acecode_pair_300k/create_rm_dataset.sh
 ```
