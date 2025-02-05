@@ -49,7 +49,7 @@
 ## 📚Dataset
 - [AceCode-89K](https://huggingface.co/datasets/TIGER-Lab/AceCode-89K): The first large-scale coding dataset with an average of 16 test cases per prompt, synthesized by GPT-4o-mini
 - [AceCodePair-300K](https://huggingface.co/datasets/TIGER-Lab/AceCodePair-300K): Constructed preference pairs from AceCode-89K for training reward model.
-- AceCode-89K-hard: where you can create sample 25% of the hard examples via this [script](#)
+- AceCode-89K-hard: where you can create sample 25% of the hard examples following commands [here](https://github.com/TIGER-AI-Lab/AceCoder/tree/main/train/train_rl#data-preparation)
 
 ## 🤗Model
 
