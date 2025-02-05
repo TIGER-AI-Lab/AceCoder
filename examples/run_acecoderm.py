@@ -90,3 +90,11 @@ print("Score of program with 3 errors:", rm_scores[0].item())
 print("Score of program with 2 errors:", rm_scores[1].item())
 print("Score of program with 1 errors:", rm_scores[2].item())
 print("Score of correct program:", rm_scores[3].item())
+"""
+RM Scores: tensor([-20.5058,  -1.7867,   0.4395,  23.0689], device='cuda:0',
+       grad_fn=<SqueezeBackward0>)
+Score of program with 3 errors: -20.505754470825195
+Score of program with 2 errors: -1.7866804599761963
+Score of program with 1 errors: 0.43949759006500244
+Score of correct program: 23.068859100341797
+"""
