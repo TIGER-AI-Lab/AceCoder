@@ -28,7 +28,7 @@
 
 ## 🔥News
 
-- [2025/2/3] We release the [AceCoder Paper](https://github.com/TIGER-AI-Lab/AceCoder/blob/main/assets/pdf/acecoder_v1.pdf), along with the [🤗 Models and Datasets](https://huggingface.co/collections/TIGER-Lab/acecoder-67a16011a6c7d65cad529eba) on Hugging Face. 
+- [2025/2/3] We release the [AceCoder Paper](https://arxiv.org/abs/2502.01718), along with the [🤗 Models and Datasets](https://huggingface.co/collections/TIGER-Lab/acecoder-67a16011a6c7d65cad529eba) on Hugging Face. 
 
 
 ## Overview
@@ -68,7 +68,7 @@
 | Qwen2.5-Coder-7B   | Rule      | AceCode-89K-hard (22k)      | [TIGER-Lab/AceCoder-Qwen2.5-Coder-7B-Base-Rule](https://huggingface.co/TIGER-Lab/AceCoder-Qwen2.5-Coder-7B-Base-Rule) |
 
 ## 📈 Performance
-See our [website](https://tiger-ai-lab.github.io/AceCoder/) or paper for detailed performance report.
+See our [website](https://tiger-ai-lab.github.io/AceCoder/) or [paper](https://arxiv.org/abs/2502.01718) for detailed performance report.
 
 ## 🚀Quick Start
 
