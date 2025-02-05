@@ -1,27 +1,45 @@
 ## Installation
 
+We use LLama-Factory off the shelf for our reward model training. Therefore, to install the environment, please refer to their repository. At the time of writing this page, the following scripts work for us:
 ```bash
-cd LLaMA-Factory
+conda create -n llamaFactory python=3.11
+conda init
+conda activate llamaFactory
+pip install -e ".[torch,metrics]"
+pip install deepspeed==0.15.4
+pip install -U "huggingface_hub[cli]"
 ```
 
+## Setup
+Please complete the following steps:
+1. Move the 3 files under configs into the llamafactory directory after you have cloned it.
+2. Add the following two entries to `LLaMA-Factory/data/dataset_info.json`:
+```json
+"AceCodePair-300K": {
+    "hf_hub_url": "TIGER-Lab/AceCodePair-300K",
+    "ranking": true,
+    "columns": {
+      "prompt": "instruction",
+      "query": "input",
+      "chosen": "chosen",
+      "rejected": "rejected"
+    }
+  },
+"AceCodePair-QwenCoderIns32B": {
+    "hf_hub_url": "TIGER-Lab/TODO-UPLOAD-THIS",
+    "ranking": true,
+    "columns": {
+      "prompt": "instruction",
+      "query": "input",
+      "chosen": "chosen",
+      "rejected": "rejected"
+    }
+  }
+```
 
-# Dataset
-- AceCode-89K
-    - `Id` (str): Unique identifier for each question
-    - `source` (str): which dataset
-    - `question` (str): the question
-    - `test_cases` (List[str]): test cases for the question
-    - `inferences` (List[dict]):
-        - `model_name` (str): the model name
-        - `completion_id` (int): the completion id
-        - `completion` (str): the completion
-        - `pass_rate` (float): the pass rate
-        - `test_results` (List[int]): the test results
-    - `context_messages` (List[List[dict]]): context messages for the question
-        - `content` (str): the content of the message
-        - `role` (str): the role of the message
-
-(TODO)
-- AceCode-Pair-300K:
-    - `Id` (str): Unique identifier for each question
-
+## Training
+1. Change the `output_dir` field in the yaml files that you have copied for the desired model output path.
+2. Run:
+```bash
+llamafactory-cli train train_qwen_coder_ins_2.5_{7/32}b.yaml
+```
