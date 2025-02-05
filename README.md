@@ -78,10 +78,11 @@ git submodule update
 ```
 
 ### Use AceCodrRM
-```python
-# pip install transformers torch
-python examples/run_acecoderm.py
+First install acecoder as a package:
+```bash
+pip install https://github.com/TIGER-AI-Lab/AceCoder.git
 ```
+Then see [examples/run_acecoderm.py](examples/run_acecoderm.py) for how to use AceCoderRM. Quick command `python examples/run_acecoderm.py` will run the example.
 
 ### Training Reward Model
 See [train/train_rm/README.md](train/train_rm/README.md) for detailed instructions.
