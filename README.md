@@ -1,6 +1,6 @@
 # 🂡 AceCoder
 
-<a target="_blank" href="https://github.com/TIGER-AI-Lab/AceCoder/blob/main/assets/pdf/acecoder_v1.pdf">
+<a target="_blank" href="https://arxiv.org/abs/2502.01718">
 <img style="height:22pt" src="https://img.shields.io/badge/-Paper-red?style=flat&logo=arxiv"></a>
 <a target="_blank" href="https://github.com/TIGER-AI-Lab/AceCoder">
 <img style="height:22pt" src="https://img.shields.io/badge/-Code-green?style=flat&logo=github"></a>
@@ -28,7 +28,7 @@
 
 ## 🔥News
 
-- [2025/2/3] We release the [AceCoder Paper](https://github.com/TIGER-AI-Lab/AceCoder/blob/main/assets/pdf/acecoder_v1.pdf), along with the [🤗 Models and Datasets](https://huggingface.co/collections/TIGER-Lab/acecoder-67a16011a6c7d65cad529eba) on Hugging Face. 
+- [2025/2/3] We release the [AceCoder Paper](https://arxiv.org/abs/2502.01718), along with the [🤗 Models and Datasets](https://huggingface.co/collections/TIGER-Lab/acecoder-67a16011a6c7d65cad529eba) on Hugging Face. 
 
 
 ## Overview
