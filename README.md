@@ -1,6 +1,6 @@
 # 🂡 AceCoder
 
-<a target="_blank" href="https://github.com/TIGER-AI-Lab/AceCoder/blob/main/assets/pdf/acecoder_v1.pdf">
+<a target="_blank" href="https://arxiv.org/abs/2502.01718">
 <img style="height:22pt" src="https://img.shields.io/badge/-Paper-red?style=flat&logo=arxiv"></a>
 <a target="_blank" href="https://github.com/TIGER-AI-Lab/AceCoder">
 <img style="height:22pt" src="https://img.shields.io/badge/-Code-green?style=flat&logo=github"></a>
@@ -94,6 +94,6 @@ If you find this work helpful, please consider citing:
     author={Zeng, Huaye and Jiang, Dongfu and Wang, Haozhe and Nie, Ping and Chen, Xiaotong and Chen, Wenhu},
     journal={ArXiv},
     year={2025},
-    volume={}
+    volume={2502.01718}
 }
 ```
