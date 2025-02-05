@@ -1,0 +1,5 @@
+#!/bin/bash
+
+python acecode_pair_300k/create_rm_dataset.py
+python acecode_pair_300k/convert_dataset_for_llama_factory.py
+python acecode_pair_300k/generate_main_pair_dataset.py
