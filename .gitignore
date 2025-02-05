@@ -1,3 +1,12 @@
+# Dataset Curation Cache Data
+data/inferenced output
+data/training_dataset/bigcode_python_fns/data
+data/training_dataset/evol/data
+data/training_dataset/oss/data
+data/cache
+data/*.jsonl
+data/generated_datasets
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
