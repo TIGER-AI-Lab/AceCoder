@@ -77,8 +77,14 @@ git submodule init
 git submodule update
 ```
 
+### Use AceCodrRM
+```python
+# pip install transformers torch
+python examples/run_acecoderm.py
+```
+
 ### Training Reward Model
-(TODO)
+See [train/train_rm/README.md](train/train_rm/README.md) for detailed instructions.
 
 ### Training RL Model
 See [train/train_rl/README.md](train/train_rl/README.md) for detailed instructions.
