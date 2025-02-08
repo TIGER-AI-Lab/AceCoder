@@ -1,5 +1,5 @@
 # AceCode (Data Repository)
-Welcome to the data directory for the AceCode project. In this folder, you can find scripts / code used to recreate the AceCode-89K and AceCodePair-300k.
+Welcome to the data directory for the AceCode project. In this folder, you can find scripts / code used to recreate the AceCode-87K and AceCodePair-300k.
 **IMPORTANT: All instruction in this folder assumes your terminal is in the current folder (AceCoder/data/), please use ```cd data``` if you are not. We also use conda to manage our environment, so make sure you initialize to the correct interpreter:**
 
 ```bash
@@ -33,7 +33,7 @@ pip install xformers==0.0.23.post1 --index-url https://download.pytorch.org/whl/
 ```
 
 ## Dataset Curation
-Follow the following steps closely to create AceCode-89K and AceCodePair-300K.
+Follow the following steps closely to create AceCode-87K and AceCodePair-300K.
 
 ### Download datasets from hub
 We will download the following datasets from huggingface and cache them locally:
@@ -91,7 +91,7 @@ python data/training_dataset/consolidate_dataset.py
 ### Creating AceCode-98K
 run:
 ```bash
-python acecode_89k/generate_main_dataset.py
+python acecode_87K/generate_main_dataset.py
 ```
 
 ### Creating AceCodePair-300K

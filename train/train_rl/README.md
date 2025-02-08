@@ -14,9 +14,9 @@ pip install evalplus # requried for rule-based reward for code generation
 ```
 
 ## Data Preparation
-- To get the AceCode-89K-hard that only keeps 25% of the examples that makes the RL training faster, run the following command:
+- To get the AceCode-87K-hard that only keeps 25% of the examples that makes the RL training faster, run the following command:
 ```bash
-python scripts/get_hard_data.py --dataset_path "TIGER-Lab/AceCode-89K" --output_path "./data/acecode_89k/acecode_89k.json" --only_keep_hard_examples True
+python scripts/get_hard_data.py --dataset_path "TIGER-Lab/AceCode-87K" --output_path "./data/acecode_87K/acecode_87K.json" --only_keep_hard_examples True
 ```
 
 ## Reward model preparation
@@ -43,7 +43,7 @@ bash scripts/train_reinforce_ray.sh # reinforcement++
 # and change the following variables in the script
 # policy_pretrain="Your initial policy model"
 # reward_pretrain="TIGER-Lab/AceCodeRM-7B"
-# dataset_path="./data/acecode_89k/acecode_89k.json"
+# dataset_path="./data/acecode_87K/acecode_87K.json"
 # run_name="Your run name"
 ```
 - with rule-based reward (binary pass rate)
@@ -52,6 +52,6 @@ bash scripts/train_reinforce_ray_rule_rm.sh # reinforcement++
 # and change the following variables in the script
 # policy_pretrain="Your initial policy model"
 # binary_reward=True 
-# dataset_path="./data/acecode_89k/acecode_89k.json"
+# dataset_path="./data/acecode_87K/acecode_87K.json"
 # run_name="Your run name"
 ```

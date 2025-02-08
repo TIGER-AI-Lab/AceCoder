@@ -1,7 +1,7 @@
 from training_dataset.constants import DATASET_LST
 from utility.utility import load_jsonl, save_jsonl
 
-# Use this script to generate the "AceCode-89K dataset, which contains the questions, tests, inferences, etc."
+# Use this script to generate the "AceCode-87K dataset, which contains the questions, tests, inferences, etc."
 
 
 def generate_entries(oracle_model: str, save_path: str):
@@ -44,5 +44,5 @@ def generate_entries(oracle_model: str, save_path: str):
 
 if __name__ == "__main__":
     oracle_model = "qwen_coder_2.5_32b_greedy"
-    save_path = "AceCode-89K.jsonl"
+    save_path = "AceCode-87K.jsonl"
     generate_entries(oracle_model=oracle_model, save_path=save_path)

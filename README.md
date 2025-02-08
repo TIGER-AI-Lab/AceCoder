@@ -6,7 +6,7 @@
 <img style="height:22pt" src="https://img.shields.io/badge/-Code-green?style=flat&logo=github"></a>
 <a target="_blank" href="https://tiger-ai-lab.github.io/AceCoder/">
 <img style="height:22pt" src="https://img.shields.io/badge/-🌐%20Website-blue?style=flat"></a>
-<a target="_blank" href="https://huggingface.co/datasets/TIGER-Lab/AceCode-89K">
+<a target="_blank" href="https://huggingface.co/datasets/TIGER-Lab/AceCode-87K">
 <img style="height:22pt" src="https://img.shields.io/badge/-🤗%20Dataset-red?style=flat"></a>
 <a target="_blank" href="https://huggingface.co/collections/TIGER-Lab/acecoder-67a16011a6c7d65cad529eba">
 <img style="height:22pt" src="https://img.shields.io/badge/-🤗%20Models-red?style=flat"></a>
@@ -36,7 +36,7 @@
 
 <details><summary>Abstract</summary> 
 
-- We introduce AceCoder, the first work to propose a fully automated pipeline for synthesizing large-scale reliable tests used for the reward model training and reinforcement learning in the coding scenario. To do this, we curated the dataset [AceCode-89K](https://huggingface.co/datasets/TIGER-Lab/AceCode-89K), where we start from a seed code dataset and prompt powerful LLMs to "imagine" proper test cases for the coding question and filter the noisy ones.
+- We introduce AceCoder, the first work to propose a fully automated pipeline for synthesizing large-scale reliable tests used for the reward model training and reinforcement learning in the coding scenario. To do this, we curated the dataset [AceCode-87K](https://huggingface.co/datasets/TIGER-Lab/AceCode-87K), where we start from a seed code dataset and prompt powerful LLMs to "imagine" proper test cases for the coding question and filter the noisy ones.
 
 - We trained two reward model [AceCodeRM-7B](https://huggingface.co/TIGER-Lab/AceCodeRM-7B) and [AceCodeRM-32B](https://huggingface.co/TIGER-Lab/AceCodeRM-32B) on the constructed [preference pairs](https://huggingface.co/datasets/TIGER-Lab/AceCodePair-300K). Best-of-N sampling results on HumanEval(+), MBPP(+), BigCodeBench, LiveCodeBench (V4) show consistent improvement.
 
@@ -47,9 +47,9 @@
 </details>
 
 ## 📚Dataset
-- [AceCode-89K](https://huggingface.co/datasets/TIGER-Lab/AceCode-89K): The first large-scale coding dataset with an average of 16 test cases per prompt, synthesized by GPT-4o-mini
-- [AceCodePair-300K](https://huggingface.co/datasets/TIGER-Lab/AceCodePair-300K): Constructed preference pairs from AceCode-89K for training reward model.
-- AceCode-89K-hard: where you can create sample 25% of the hard examples following commands [here](https://github.com/TIGER-AI-Lab/AceCoder/tree/main/train/train_rl#data-preparation)
+- [AceCode-87K](https://huggingface.co/datasets/TIGER-Lab/AceCode-87K): The first large-scale coding dataset with an average of 16 test cases per prompt, synthesized by GPT-4o-mini
+- [AceCodePair-300K](https://huggingface.co/datasets/TIGER-Lab/AceCodePair-300K): Constructed preference pairs from AceCode-87K for training reward model.
+- AceCode-87K-hard: where you can create sample 25% of the hard examples following commands [here](https://github.com/TIGER-AI-Lab/AceCoder/tree/main/train/train_rl#data-preparation)
 
 ## 🤗Model
 
@@ -60,12 +60,12 @@
 ### AceCoder (RL Model)
 | Initial Policy Model | Reward Type | Training dataset | Final RL Model |
 |:---------------------:|:-----------:|:----------------:|:--------------:|
-| Qwen2.5-7B-Instruct   | AceCodeRM-7B      | AceCode-89K-hard (22k)      | [TIGER-Lab/AceCoder-Qwen2.5-7B-Ins-RM](https://huggingface.co/TIGER-Lab/AceCoder-Qwen2.5-7B-Ins-RM) |
-| Qwen2.5-7B-Instruct   | Rule      | AceCode-89K-hard (22k)      | [TIGER-Lab/AceCoder-Qwen2.5-7B-Ins-Rule](https://huggingface.co/TIGER-Lab/AceCoder-Qwen2.5-7B-Ins-Rule) |
-| Qwen2.5-Coder-7B-Instruct   | AceCodeRM-7B      | AceCode-89K-hard (22k)      | [TIGER-Lab/AceCoder-Qwen2.5-Coder-7B-Ins-RM](https://huggingface.co/TIGER-Lab/AceCoder-Qwen2.5-Coder-7B-Ins-RM) |
-| Qwen2.5-Coder-7B-Instruct   | Rule      | AceCode-89K-hard (22k)      | [TIGER-Lab/AceCoder-Qwen2.5-Coder-7B-Ins-Rule](https://huggingface.co/TIGER-Lab/AceCoder-Qwen2.5-Coder-7B-Ins-Rule) |
-| Qwen2.5-Coder-7B   | AceCodeRM-7B      | AceCode-89K-hard (22k)      | [TIGER-Lab/AceCoder-Qwen2.5-Coder-7B-Base-RM](https://huggingface.co/TIGER-Lab/AceCoder-Qwen2.5-Coder-7B-Base-RM) |
-| Qwen2.5-Coder-7B   | Rule      | AceCode-89K-hard (22k)      | [TIGER-Lab/AceCoder-Qwen2.5-Coder-7B-Base-Rule](https://huggingface.co/TIGER-Lab/AceCoder-Qwen2.5-Coder-7B-Base-Rule) |
+| Qwen2.5-7B-Instruct   | AceCodeRM-7B      | AceCode-87K-hard (22k)      | [TIGER-Lab/AceCoder-Qwen2.5-7B-Ins-RM](https://huggingface.co/TIGER-Lab/AceCoder-Qwen2.5-7B-Ins-RM) |
+| Qwen2.5-7B-Instruct   | Rule      | AceCode-87K-hard (22k)      | [TIGER-Lab/AceCoder-Qwen2.5-7B-Ins-Rule](https://huggingface.co/TIGER-Lab/AceCoder-Qwen2.5-7B-Ins-Rule) |
+| Qwen2.5-Coder-7B-Instruct   | AceCodeRM-7B      | AceCode-87K-hard (22k)      | [TIGER-Lab/AceCoder-Qwen2.5-Coder-7B-Ins-RM](https://huggingface.co/TIGER-Lab/AceCoder-Qwen2.5-Coder-7B-Ins-RM) |
+| Qwen2.5-Coder-7B-Instruct   | Rule      | AceCode-87K-hard (22k)      | [TIGER-Lab/AceCoder-Qwen2.5-Coder-7B-Ins-Rule](https://huggingface.co/TIGER-Lab/AceCoder-Qwen2.5-Coder-7B-Ins-Rule) |
+| Qwen2.5-Coder-7B   | AceCodeRM-7B      | AceCode-87K-hard (22k)      | [TIGER-Lab/AceCoder-Qwen2.5-Coder-7B-Base-RM](https://huggingface.co/TIGER-Lab/AceCoder-Qwen2.5-Coder-7B-Base-RM) |
+| Qwen2.5-Coder-7B   | Rule      | AceCode-87K-hard (22k)      | [TIGER-Lab/AceCoder-Qwen2.5-Coder-7B-Base-Rule](https://huggingface.co/TIGER-Lab/AceCoder-Qwen2.5-Coder-7B-Base-Rule) |
 
 ## 📈 Performance
 See our [website](https://tiger-ai-lab.github.io/AceCoder/) or [paper](https://arxiv.org/abs/2502.01718) for detailed performance report.

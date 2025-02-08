@@ -2,7 +2,7 @@ import json
 
 from utility.utility import save_jsonl
 
-# Use this script to generate the "AceCode-89K dataset, which contains the questions, tests, inferences, etc."
+# Use this script to generate the "AceCode-87K dataset, which contains the questions, tests, inferences, etc."
 
 
 def generate_entries(inf_model_name: str, save_path: str):
