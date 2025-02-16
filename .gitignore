@@ -170,3 +170,8 @@ cython_debug/
 .DS_Store
 
 /bak
+/test*
+/data
+/.vscode
+/*.json
+/*.ipynb
