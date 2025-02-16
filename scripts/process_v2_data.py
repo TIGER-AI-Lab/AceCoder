@@ -176,6 +176,7 @@ def main(
     dataset_path="CodeDPO/AceCoderV2-mini",
     output_dir="data/acecoder_v2_mini",
     to_upload_repo="CodeDPO/AceCoderV2-mini-processed",
+    num_proc=32
 ):
     dataset = datasets.load_dataset(dataset_path, split='train')
     output_file = Path(output_dir) / "dataset.json"
@@ -188,14 +189,22 @@ def main(
     print(f"Filtered dataset: {dataset}")
     
     print(f"Start parsing gpt response")
-    dataset = dataset.map(parse_gpt_response, num_proc=32, remove_columns=["instruction", "program"])
+    dataset = dataset.map(parse_gpt_response, num_proc=num_proc, remove_columns=["instruction", "program"])
     
     print(f"Num errors: {len([item for item in dataset if item['error']])}/{len(dataset)}")
     print(f"Num valid questions: {len([item for item in dataset if item['question']])}/{len(dataset)}")
     print(f"Num valid tests: {len([item for item in dataset if item['tests']])}/{len(dataset)}")
+    
+    def filter_valid(item):
+        return item['question'] and item['tests'] and not item['error']
+    dataset = dataset.filter(filter_valid)
+    print(f"Final dataset: {dataset}")
+    dataset = dataset.remove_columns(["gpt_response", "error", "raw_tests"])
+    
     with open(output_file, "w") as f:
         json.dump([x for x in dataset], f, indent=4)
     print(f"Saved to {output_file}")
+    
     if to_upload_repo:
         dataset.push_to_hub(to_upload_repo, split='train')
         print(f"Pushed to {to_upload_repo}")
