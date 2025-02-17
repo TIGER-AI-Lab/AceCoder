@@ -16,6 +16,7 @@ setup(
         "torch",
         "datasets",
         "accelerate",
+        "evalplus"
     ],
 )
 
