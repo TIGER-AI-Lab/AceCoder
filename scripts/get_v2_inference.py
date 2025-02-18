@@ -13,7 +13,7 @@ def main(
     top_p=1.0,
     num_gpu_per_worker=1,
     num_workers=1,
-    n_eval_workers=16,
+    n_eval_workers=1,
     binary=False,
     output_path=None
 ):
@@ -51,26 +51,45 @@ def main(
             })
     
     all_samples_results, pass_rates = evaluate_test_cases(samples, n_workers=n_eval_workers, test_details=not binary)
+    all_eval_results = [x["eval_results"] for x in all_samples_results]
+    all_extracted_solutions = [x["solution"] for x in all_samples_results]
     scores = pass_rates
     if binary:
         scores = [1 if x == 1 else 0 for x in scores] # if binary
     
     idx = 0
-    all_scores = []
+    grouped_scores = []
+    grouped_eval_results = []
+    grouped_extracted_solutions = []
+    
     for i, item in enumerate(dataset):
-        all_scores.append(scores[idx:idx+len(item['outputs'])])
+        grouped_scores.append(scores[idx:idx+len(item['outputs'])])
+        grouped_eval_results.append(all_eval_results[idx:idx+len(item['outputs'])])
+        grouped_extracted_solutions.append(all_extracted_solutions[idx:idx+len(item['outputs'])])
         idx += len(item['outputs'])
     
-    dataset = dataset.add_column("scores", all_scores)
+    dataset = dataset.add_column("scores", grouped_scores)
+    dataset = dataset.add_column("eval_results", grouped_eval_results)
+    dataset = dataset.add_column("extracted_solutions", grouped_extracted_solutions)
     
     if not output_path:
-        output_path = Path("inference_results") / f"{model_name.replace('/', '-')}.json"
+        output_path = Path("results/inference_results") / f"{model_name.replace('/', '-')}.json"
     else:
         output_path = Path(output_path)
     output_path.parent.mkdir(parents=True, exist_ok=True)
     with open(output_path, "w") as f:
         json.dump([x for x in dataset], f, indent=4)
     print(f"Results saved to {output_path}")
+    
+    # summary of the results
+    i = 1
+    while i <= n:
+        pass_at_n = sum([
+            any([x["pass_rate"] == 1.0 for x in item['eval_results'][:i]]) for item in dataset
+        ]) / len(dataset)
+        print(f"Pass at {i}: {pass_at_n*100:.2f}%")
+        i *= 2
+    print(f"Average pass rate: {sum(pass_rates) / len(pass_rates) * 100:.2f}%")
     
 if __name__ == "__main__":
     fire.Fire(main)

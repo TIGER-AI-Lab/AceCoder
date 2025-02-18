@@ -15,66 +15,18 @@ from termcolor import cprint
 from tqdm import tqdm
 
 from evalplus.sanitize import sanitize, code_extract
-from evalplus.codegen import run_codegen
-from evalplus.config import *
-from evalplus.data import (
-    get_human_eval_plus,
-    get_human_eval_plus_hash,
-    get_mbpp_plus,
-    get_mbpp_plus_hash,
-    load_solutions,
-)
-from evalplus.data.mbpp import mbpp_serialize_inputs
-from evalplus.data.utils import CACHE_DIR
+
+# from evalplus.config import *
 from .evalplus_eval import (
-    PASS,
-    compatible_eval_result,
-    estimate_pass_at_k,
-    untrusted_check,
     untrusted_check_assert,
 )
-from evalplus.eval._special_oracle import MBPP_OUTPUT_NOT_NONE_TASKS
-from evalplus.gen.util import trusted_exec
+
+DEFAULT_GT_TIME_LIMIT_FACTOR = 4.0
+DEFAULT_MIN_TIME_LIMIT = 1.0
 
 # 1st item: the status
 # 2nd item (optional): the detailed pass/fail boolean for each input
 Result = Tuple[str, List[bool]]
-
-def check_correctness(
-    task_id: int,
-    completion_id: int,
-    test_inputs: List[Any],
-    entry_point: str,
-    solution: str,
-    expected_output: Dict[str, List],
-    dataset: str=None,
-    base_only=False,
-    fast_check=False,
-    identifier=None,
-    min_time_limit: float = DEFAULT_MIN_TIME_LIMIT,
-    gt_time_limit_factor: float = DEFAULT_GT_TIME_LIMIT_FACTOR,
-    atol: int=1e-6,
-) -> Dict[str, Result]:  # {...}, "base" | "plus" -> (status, details)
-    ret = {
-        "completion_id": completion_id,
-        "task_id": task_id,
-        "_identifier": identifier,
-        "solution": solution,
-    }
-    ret["base"] = untrusted_check(
-        dataset,
-        solution,
-        test_inputs,
-        entry_point,
-        expected=expected_output,
-        atol=atol,
-        ref_time=[DEFAULT_MIN_TIME_LIMIT]*len(test_inputs),
-        fast_check=fast_check,
-        min_time_limit=min_time_limit,
-        gt_time_limit_factor=gt_time_limit_factor,
-    )
-
-    return ret
 
 def check_correctness_assert(
     task_id: int,
@@ -105,7 +57,7 @@ def check_correctness_assert(
         "solution": solution,
         "n_tests": len(assert_tests),
     }
-    ret["base"] = untrusted_check_assert(
+    ret["eval_results"] = untrusted_check_assert(
         dataset,
         solution,
         entry_point,
@@ -275,8 +227,7 @@ def evaluate(
                 #         "base": ["timeout", []]
                 #     }
                 remainings.remove(result["_identifier"])
-                result['pass_rate'] = sum(result['base'][1]) / result['n_tests']
-                # all_samples_results.append(result)
+                # result['pass_rate'] = result['eval_results']['pass_rate']
                 all_samples_results_identifier_map[result["_identifier"]] = result
                 eval_results[result["task_id"]].append(result)
             
@@ -292,7 +243,7 @@ def evaluate(
                     json.dump(all_samples_results, f, indent=4)
             print(f"Results saved to {result_path}")
             
-    pass_rates = [x['pass_rate'] for x in all_samples_results]
+    pass_rates = [x['eval_results']['pass_rate'] for x in all_samples_results]
     if __name__ == "__main__":
         print(f"Pass rate: {np.mean(pass_rates)}")
     else:
