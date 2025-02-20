@@ -22,6 +22,7 @@ def clean_text_for_utf8(text):
         pass
     # Method 1: Replace surrogate pairs with replacement character
     cleaned = text.encode('utf-16', 'surrogatepass').decode('utf-16', 'replace')
+    print(f"Cleaning text with invalid Unicode characters, cleaned: {cleaned}")
     
     # Method 2: Remove surrogate pairs entirely
     # cleaned = ''.join(char for char in text if not 0xD800 <= ord(char) <= 0xDFFF)
@@ -166,14 +167,31 @@ def parse_gpt_response(item):
     assert error is None or isinstance(error, str), f"error: {error}"
     item['ori_question'] = item['instruction']
     item['ori_program'] = item['program']
-    item['question'] = clean_text_for_utf8(new_question) if new_question else None
-    item['raw_tests'] = raw_tests
+    
+    try:
+        new_question.encode('utf-8') if new_question else None
+    except Exception as e:
+        error = (error or "") + "\n" + str(e)
+        new_question = None
+    
+    try:
+        [x.encode('utf-8') for x in tests] if tests else None
+    except Exception as e:
+        error = (error or "") + "\n" + str(e)
+        tests = None
+        raw_tests = None
+    
+    item['question'] = new_question
     item['tests'] = tests
+    item['raw_tests'] = raw_tests
+    # item['question'] = clean_text_for_utf8(new_question) if new_question else None
+    # item['raw_tests'] = clean_text_for_utf8(raw_tests) if raw_tests else None
+    # item['tests'] = [clean_text_for_utf8(x) for x in tests] if tests else None
     item['error'] = error
     return item
     
 def main(
-    dataset_path="CodeDPO/AceCoderV2-mini",
+    dataset_path="CodeDPO/AceCoderV2-mini-raw",
     output_dir="data/acecoder_v2_mini",
     to_upload_repo="CodeDPO/AceCoderV2-mini-processed",
     num_proc=32
@@ -201,6 +219,7 @@ def main(
     print(f"Final dataset: {dataset}")
     dataset = dataset.remove_columns(["gpt_response", "error", "raw_tests"])
     
+    output_file.parent.mkdir(parents=True, exist_ok=True)
     with open(output_file, "w") as f:
         json.dump([x for x in dataset], f, indent=4)
     print(f"Saved to {output_file}")
@@ -211,3 +230,9 @@ def main(
 
 if __name__ == "__main__":
     fire.Fire(main)
+    
+    
+"""
+python scripts/process_v2_data.py --dataset_path CodeDPO/AceCoderV2-mini --output_dir data/acecoder_v2_mini --to_upload_repo CodeDPO/AceCoderV2-mini-processed
+python scripts/process_v2_data.py --dataset_path CodeDPO/AceCoderV2-150K-raw --output_dir data/acecoder_v2_150k --to_upload_repo CodeDPO/AceCoderV2-150K-processed
+"""

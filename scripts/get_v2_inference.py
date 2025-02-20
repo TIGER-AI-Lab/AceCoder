@@ -12,12 +12,15 @@ def main(
     n=16,
     temperature=1.0,
     top_p=1.0,
+    max_tokens=32768,
     num_gpu_per_worker=1,
     num_workers=2,
     n_eval_workers=16,
     binary=False,
     output_path=None,
     max_samples=2000,
+    engine="sglang",
+    overwrite=False
 ):
     
     dataset = datasets.load_dataset(dataset_path, split='train')
@@ -31,19 +34,21 @@ def main(
         output_path = Path(output_path)
     output_path.parent.mkdir(parents=True, exist_ok=True)
     
-    if not output_path.exists():
+    if not output_path.exists() or overwrite:
     
         questions = dataset['question']
         
-        engine = LLMEngine()
-        engine.load_model(
+        llm = LLMEngine()
+        llm.load_model(
             model_name=model_name,
             num_gpu_per_worker=num_gpu_per_worker,
             num_workers=num_workers,
-            engine="sglang",
+            engine=engine,
+            use_cache=True
         )
         
-        outputs = engine.batch_call_model(model_name, questions, n=n, temperature=temperature, top_p=top_p)
+        outputs = llm.batch_call_model(model_name, questions, n=n, temperature=temperature, top_p=top_p, max_tokens=max_tokens)
+        llm.unload_model()
         
         dataset = dataset.add_column("outputs", [[x] if isinstance(x, str) else x for x in outputs])
             
@@ -131,3 +136,8 @@ def main(
 if __name__ == "__main__":
     fire.Fire(main)
     
+"""
+python scripts/get_v2_inference.py --dataset_path CodeDPO/AceCoderV2-mini-processed --model_name accounts/fireworks/models/deepseek-r1 \
+    --n 1 --temperature 1.0 --top_p 1.0 --num_gpu_per_worker 1 --num_workers 2 --n_eval_workers 16 \
+    --max_samples 5 --engine fireworks --overwrite True
+"""
