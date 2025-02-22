@@ -106,6 +106,7 @@ _UNEXECUTED = 5
 _SYNTAX_ERROR = 6
 
 _mapping = {_SUCCESS: PASS, _FAILED: FAIL, _TIMEOUT: TIMEOUT, _MISSING_DEPENDENCY: MISSING_DEPENDENCY, _UNEXECUTED: UNEXECUTED, _SYNTAX_ERROR: SYNTAX_ERROR, _UNKNOWN: None}
+ERROR_STR_LEN = 256
 
 
 def query_maximum_memory_bytes() -> Optional[int]:
@@ -167,16 +168,16 @@ def unsafe_execute_assert(
                         details[i] = _SUCCESS
                     except ModuleNotFoundError as e:
                         details[i] = _MISSING_DEPENDENCY
-                        write_string(tests_errors, i, str(e))
+                        write_string(tests_errors, i, str(e), ERROR_STR_LEN)
                     except SyntaxError as e:
                         details[i] = _SYNTAX_ERROR
-                        write_string(tests_errors, i, str(e))
+                        write_string(tests_errors, i, str(e), ERROR_STR_LEN)
                     except TimeoutException as e:
                         details[i] = _TIMEOUT
-                        write_string(tests_errors, i, str(e))
+                        write_string(tests_errors, i, str(e), ERROR_STR_LEN)
                     except Exception as e:
                         details[i] = _FAILED
-                        write_string(tests_errors, i, str(e))
+                        write_string(tests_errors, i, str(e), ERROR_STR_LEN)
                         
                 progress.value += 1 
                 if details[i] != _SUCCESS and fast_check:
@@ -192,7 +193,7 @@ def unsafe_execute_assert(
             # if "No module named" in str(e):
             #     print(e)
             stat.value = _FAILED
-            write_string(code_error, 0, str(e))
+            write_string(code_error, 0, str(e), ERROR_STR_LEN)
         # Needed for cleaning up.
         shutil.rmtree = rmtree
         os.rmdir = rmdir
@@ -220,8 +221,8 @@ def untrusted_check_assert(
     details = Array("b", [False for _ in range(len(assert_tests))])
     # errors is a list of strings
     # Method 2: Or if you need to initialize with spaces
-    tests_errors = Array(c_char, b" " * (len(assert_tests) * 256))
-    code_error = Array(c_char, b" " * 256)
+    tests_errors = Array(c_char, b" " * (len(assert_tests) * ERROR_STR_LEN))
+    code_error = Array(c_char, b" " * ERROR_STR_LEN)
 
     p = multiprocessing.Process(
         target=unsafe_execute_assert,
@@ -252,9 +253,9 @@ def untrusted_check_assert(
     stat = _mapping[stat.value]
     details = details[: progress.value] + [_UNEXECUTED] * (len(assert_tests) - progress.value)
     
-    tests_errors = [read_string(tests_errors, i, 1024) for i in range(len(assert_tests))]
+    tests_errors = [read_string(tests_errors, i, ERROR_STR_LEN) for i in range(len(assert_tests))]
     tests_errors = [x if x.strip() else None for x in tests_errors]
-    code_error = read_string(code_error, 0, 1024) if code_error[0] != 0 else None
+    code_error = read_string(code_error, 0, ERROR_STR_LEN) if code_error[0] != 0 else None
     code_error = code_error if code_error.strip() else None
     
     details = [{"pass": x == _SUCCESS, "reason": _mapping[x], "error_message": tests_errors[i], "time_limit": time_limits[i]} for i, x in enumerate(details)]

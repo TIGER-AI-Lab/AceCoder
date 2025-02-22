@@ -1,5 +1,6 @@
 import fire
 import json
+import regex as re
 import datasets
 from llm_engines import LLMEngine
 from acecoder import evaluate_test_cases
@@ -18,9 +19,10 @@ def main(
     n_eval_workers=16,
     binary=False,
     output_path=None,
-    max_samples=2000,
+    max_samples=1000,
     engine="sglang",
-    overwrite=False
+    overwrite=False,
+    num_proc=8
 ):
     
     dataset = datasets.load_dataset(dataset_path, split='train')
@@ -47,7 +49,7 @@ def main(
             use_cache=True
         )
         
-        outputs = llm.batch_call_model(model_name, questions, n=n, temperature=temperature, top_p=top_p, max_tokens=max_tokens)
+        outputs = llm.batch_call_model(model_name, questions, n=n, temperature=temperature, top_p=top_p, max_tokens=max_tokens, num_proc=num_proc)
         llm.unload_model()
         
         dataset = dataset.add_column("outputs", [[x] if isinstance(x, str) else x for x in outputs])
@@ -58,6 +60,7 @@ def main(
             test_case = item['tests']
             outputs = item['outputs']
             for j, output in enumerate(outputs):
+                output = re.sub(r"<think>(.|\n)*?</think>", "", output)
                 samples.append({
                     'task_id': task_id,
                     'prompt': item['question'],
@@ -137,7 +140,11 @@ if __name__ == "__main__":
     fire.Fire(main)
     
 """
+python scripts/get_v2_inference.py --dataset_path CodeDPO/AceCoderV2-mini-processed --model_name Qwen/Qwen2.5-Coder-7B-Instruct \
+    --n 16 --temperature 1.0 --top_p 1.0 --num_gpu_per_worker 1 --num_workers 2 --n_eval_workers 16 \
+    --max_samples 2000 --engine fireworks --overwrite False
+    
 python scripts/get_v2_inference.py --dataset_path CodeDPO/AceCoderV2-mini-processed --model_name accounts/fireworks/models/deepseek-r1 \
-    --n 1 --temperature 1.0 --top_p 1.0 --num_gpu_per_worker 1 --num_workers 2 --n_eval_workers 16 \
-    --max_samples 5 --engine fireworks --overwrite True
+    --n 1 --temperature 0.6 --top_p 1.0 --num_gpu_per_worker 1 --num_workers 2 --n_eval_workers 16 \
+    --max_samples 500 --engine fireworks --overwrite True
 """
