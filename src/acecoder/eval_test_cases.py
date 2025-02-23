@@ -43,23 +43,27 @@ def check_correctness_assert(
     extract_solution:bool=False,
     atol: int=1e-6,
 ) -> Dict[str, Result]:  # {...}, "base" | "plus" -> (status, details)
+    is_extracted = False
     if extract_solution:
         # base model may sometimes outputs too many "\n" and makes the code extraction too ** flow.
         # so we skip them if the number of lines > 500
         if not len(solution.split("\n")) > 500: 
-            _solution = code_extract(solution.encode('utf-8', 'ignore').decode('utf-8').replace('\x00', ''))    
-            if entry_point in _solution:
-                solution = _solution
+            extracted_solution = code_extract(solution.encode('utf-8', 'ignore').decode('utf-8').replace('\x00', ''))    
+            # if entry_point in _solution:
+            #     solution = _solution
+            is_extracted = True
+        else:
+            extracted_solution = solution
     ret = {
         "completion_id": completion_id,
         "task_id": task_id,
         "_identifier": identifier,
-        "solution": solution,
+        "solution": extracted_solution,
         "n_tests": len(assert_tests),
     }
-    ret["eval_results"] = untrusted_check_assert(
+    eval_results = untrusted_check_assert(
         dataset,
-        solution,
+        extracted_solution,
         entry_point,
         assert_tests,
         atol=atol,
@@ -68,7 +72,22 @@ def check_correctness_assert(
         min_time_limit=min_time_limit,
         gt_time_limit_factor=gt_time_limit_factor,
     )
-
+    if eval_results["status"] == "syntax_error" and is_extracted:
+        # try to use the original solution
+        ret['solution'] = solution
+        eval_results = untrusted_check_assert(
+            dataset,
+            solution,
+            entry_point,
+            assert_tests,
+            atol=atol,
+            ref_time=[DEFAULT_MIN_TIME_LIMIT]*len(assert_tests),
+            fast_check=fast_check,
+            min_time_limit=min_time_limit,
+            gt_time_limit_factor=gt_time_limit_factor,
+        )
+    ret["eval_results"] = eval_results
+    
     return ret
 
 def get_entry_point_from_test_case(test_case: str) -> str:

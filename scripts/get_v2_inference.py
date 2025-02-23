@@ -13,7 +13,7 @@ def main(
     n=16,
     temperature=1.0,
     top_p=1.0,
-    max_tokens=32768,
+    max_tokens=None,
     num_gpu_per_worker=1,
     num_workers=2,
     n_eval_workers=16,
@@ -52,7 +52,7 @@ def main(
         outputs = llm.batch_call_model(model_name, questions, n=n, temperature=temperature, top_p=top_p, max_tokens=max_tokens, num_proc=num_proc)
         llm.unload_model()
         
-        dataset = dataset.add_column("outputs", [[x] if isinstance(x, str) else x for x in outputs])
+        dataset = dataset.add_column("outputs", [[x] if isinstance(x, str) else x if isinstance(x, list) else [] for x in outputs])
             
         samples = []
         for i, item in enumerate(dataset):
@@ -108,7 +108,7 @@ def main(
         ]) / len(dataset)
         print(f"Pass at {i}: {pass_at_n*100:.2f}%")
         i *= 2
-    pass_rates = [sum(x) / len(x) for x in dataset['scores']]
+    pass_rates = [sum(x) / len(x) if len(x) > 0 else 0 for x in dataset['scores']]
     print(f"Average pass rate: {sum(pass_rates) / len(pass_rates) * 100:.2f}%")
     
     # analysis of the error types
@@ -142,7 +142,7 @@ if __name__ == "__main__":
 """
 python scripts/get_v2_inference.py --dataset_path CodeDPO/AceCoderV2-mini-processed --model_name Qwen/Qwen2.5-Coder-7B-Instruct \
     --n 16 --temperature 1.0 --top_p 1.0 --num_gpu_per_worker 1 --num_workers 2 --n_eval_workers 16 \
-    --max_samples 2000 --engine fireworks --overwrite False
+    --max_samples 2000 --engine sglang --overwrite True --max_tokens 8192
     
 python scripts/get_v2_inference.py --dataset_path CodeDPO/AceCoderV2-mini-processed --model_name accounts/fireworks/models/deepseek-r1 \
     --n 1 --temperature 0.6 --top_p 1.0 --num_gpu_per_worker 1 --num_workers 2 --n_eval_workers 16 \
