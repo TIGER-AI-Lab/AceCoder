@@ -7,6 +7,10 @@ from acecoder import evaluate_test_cases
 from pathlib import Path
 from collections import Counter
 
+r1_system_prompt = """\
+A conversation between User and Assistant. The user asks a question, and the Assistant solves it. The assistant first thinks about the reasoning process in the mind and then provides the user with the answer. The reasoning process and answer are enclosed within <think> </think> and <answer> </answer> tags, respectively, i.e., <think> reasoning process here </think> <answer> answer here </answer>.
+"""
+
 def main(
     dataset_path="CodeDPO/AceCoderV2-mini-processed",
     model_name="Qwen/Qwen2.5-Coder-7B-Instruct",
@@ -22,7 +26,8 @@ def main(
     max_samples=1000,
     engine="sglang",
     overwrite=False,
-    num_proc=8
+    num_proc=8,
+    add_r1_system_prompt=False
 ):
     
     dataset = datasets.load_dataset(dataset_path, split='train')
@@ -48,8 +53,25 @@ def main(
             engine=engine,
             use_cache=True
         )
-        
-        outputs = llm.batch_call_model(model_name, questions, n=n, temperature=temperature, top_p=top_p, max_tokens=max_tokens, num_proc=num_proc)
+        if add_r1_system_prompt:
+            messages = [[
+                {
+                    "role": "system",
+                    "content": r1_system_prompt
+                },
+                {
+                    "role": "user",
+                    "content": question
+                }
+            ] for question in questions]
+        else:
+            messages = [[
+                {
+                    "role": "user",
+                    "content": question
+                }
+            ] for question in questions]
+        outputs = llm.batch_call_model(model_name, messages, n=n, temperature=temperature, top_p=top_p, max_tokens=max_tokens, num_proc=num_proc)
         llm.unload_model()
         
         dataset = dataset.add_column("outputs", [[x] if isinstance(x, str) else x if isinstance(x, list) else [] for x in outputs])
@@ -147,4 +169,9 @@ python scripts/get_v2_inference.py --dataset_path CodeDPO/AceCoderV2-mini-proces
 python scripts/get_v2_inference.py --dataset_path CodeDPO/AceCoderV2-mini-processed --model_name accounts/fireworks/models/deepseek-r1 \
     --n 1 --temperature 0.6 --top_p 1.0 --num_gpu_per_worker 1 --num_workers 2 --n_eval_workers 16 \
     --max_samples 500 --engine fireworks --overwrite True
+    
+    
+python scripts/get_v2_inference.py --dataset_path CodeDPO/AceCoderV2-mini-processed --model_name /data/dongfu/AceCoder/train/train_rl/OpenRLHF/checkpoint/cold_start_sft \
+    --n 1 --temperature 0.6 --top_p 1.0 --num_gpu_per_worker 4 --num_workers 2 --n_eval_workers 16 \
+    --max_samples 10 --engine sglang --overwrite True --add_r1_system_prompt True
 """
