@@ -1,6 +1,6 @@
 import torch
 import torch.nn as nn
-from transformers import Qwen2ForCausalLM, AutoTokenizer
+from transformers import Qwen2ForCausalLM
 
 class ValueHead(nn.Module):
     r"""
@@ -44,7 +44,7 @@ class ValueHead(nn.Module):
         return output
 
 
-class AceCoderRM(Qwen2ForCausalLM):
+class AceCodeRM(Qwen2ForCausalLM):
     def __init__(self, config):
         super().__init__(config)
         self.v_head = ValueHead(config)
