@@ -44,7 +44,7 @@ class ValueHead(nn.Module):
         return output
 
 
-class Qwen2ForCausalRM(Qwen2ForCausalLM):
+class AceCoderRM(Qwen2ForCausalLM):
     def __init__(self, config):
         super().__init__(config)
         self.v_head = ValueHead(config)
@@ -104,8 +104,14 @@ class Qwen2ForCausalRM(Qwen2ForCausalLM):
         # force upcast in fp32 if logits are in half-precision
         if lm_logits.dtype != torch.float32:
             lm_logits = lm_logits.float()
+            
+        rm_scores = value.gather(
+            dim=-1, index=(attention_mask.sum(dim=-1, keepdim=True) - 1)
+        ) # find the last token (eos) in each sequence, a
+        
+        rm_scores = rm_scores.squeeze()
 
         if return_past_key_values:
-            return (lm_logits, loss, value, base_model_output.past_key_values)
+            return (rm_scores, base_model_output.past_key_values)
         else:
-            return (lm_logits, loss, value)
+            return rm_scores
